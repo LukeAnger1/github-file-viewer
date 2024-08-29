@@ -5,6 +5,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         console.log('making file retreiver object');
         fileRetriever = new fileRetriever(tab.url);
         console.log('after making file retreicer object');
+
+        // This is test code to make sure it is able to retreive the correct data
+        console.log('the type is:', fileRetriever.type, 'while the digestedURL is ', fileRetriever.digestedURL);
     }
 });
 

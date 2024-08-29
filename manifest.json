@@ -2,18 +2,10 @@
   "manifest_version": 3,
   "name": "GitHub File Viewer",
   "version": "1.0",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "scripting"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "action": {
-    "default_popup": "popup.html"
-  },
-  "host_permissions": [
-    "https://api.github.com/*"
-  ]
+  "content_scripts":[
+        {
+            "matches":["https://github.com/"],
+            "js":["/content.js"]
+        }
+    ]
 }

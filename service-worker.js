@@ -3,11 +3,19 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         console.log('Tab finished loading:', tab.url, ' with type ', typeof(tab.url));
 
         console.log('making file retreiver object');
-        fileRetriever = new fileRetriever(tab.url);
+        fileRetrieverObj = new fileRetriever(tab.url);
         console.log('after making file retreicer object');
 
         // This is test code to make sure it is able to retreive the correct data
-        console.log('the type is:', fileRetriever.type, 'while the digestedURL is ', fileRetriever.digestedURL);
+        console.log('the type is:', fileRetrieverObj.type, 'while the digestedURL is ', fileRetrieverObj.digestedURL);
+
+        // Fetch the file content and log it
+        fileRetrieverObj.fetchFileContent().then(content => {
+            console.log('File content retrieved:', content);
+        }).catch(error => {
+            console.error('Error retrieving file content:', error);
+        });
+
     }
 });
 
@@ -39,4 +47,16 @@ class fileRetriever {
       }
     }
   
+    // Method to fetch file content from the digested URL
+    async fetchFileContent() {
+        try {
+            const response = await fetch(this.digestedURL);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch file content: ${response.statusText}`);
+            }
+            return await response.text();
+        } catch (error) {
+            throw new Error(`Error fetching file content: ${error.message}`);
+        }
+    }
   }

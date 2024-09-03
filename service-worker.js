@@ -9,7 +9,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         // This is test code to make sure it is able to retreive the correct data
         console.log('the type is:', fileRetrieverObj.type, 'while the digestedURL is ', fileRetrieverObj.digestedURL);
 
-        // Fetch the file content and log it
+        // Fetch the file content and log it. 
+        // IMPORTANT NOTE: This only works on public repos, can add js-git to make it so it so users can sign in
         fileRetrieverObj.fetchFileContent().then(content => {
             console.log('File content retrieved:', content);
         }).catch(error => {

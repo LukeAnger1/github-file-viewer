@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "Sample Extension with jQuery",
+    "version": "1.0",
+    "description": "An example extension that uses jQuery.",
+    "permissions": ["activeTab", "scripting"],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://*/*", "http://*/*"],
+        "js": ["jquery.js", "contentScript.js"]
+      }
+    ]
+  }
+  

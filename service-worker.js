@@ -9,7 +9,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         // This is test code to make sure it is able to retreive the correct data
         console.log('the type is:', fileRetrieverObj.type, 'while the digestedURL is ', fileRetrieverObj.digestedURL);
 
-        // Fetch the file content and log it
+        // Fetch the file content and log it. 
+        // IMPORTANT NOTE: This only works on public repos, can add js-git to make it so it so users can sign in
         fileRetrieverObj.fetchFileContent().then(content => {
             console.log('File content retrieved:', content);
         }).catch(error => {
@@ -31,12 +32,11 @@ class fileRetriever {
     digest(rawURL) {
   
       // Check if the URL is a valid GitHub file URL
-      //if (rawURL.includes('https://github.com/') && rawURL.includes('/blob/')) {
-    if (rawURL.includes('https://github.com/')) {
+    if (rawURL.includes('https://github.com/') && rawURL.includes('/blob/')) {
   
         // Replace the base URL and the 'blob' part with the corresponding raw content URL
         this.digestedURL = rawURL
-          .replace('https://github.com/', 'https://raw.githubusercontent.com/');
+          .replace('https://github.com/', 'https://raw.githubusercontent.com/').replace('/blob/', '/');
   
         // This is the type of url to know what needs to be used API wise
         this.type = "github";

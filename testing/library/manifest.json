@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "Git Interaction with isomorphic-git",
+    "version": "1.0",
+    "description": "Interact with Git using isomorphic-git in a Chrome extension",
+    "content_scripts": [
+      {
+        "js": ["isomorphic-git.min.js", "contentScript.js"],
+        "matches": ["http://*/*", "https://*/*"]
+      }
+    ],
+    "permissions": ["activeTab"]
+  }
+  

@@ -69,20 +69,40 @@ class fileRetriever {
   // this is the function to display on the canvas
   display(canvas) {
     try {
+      // gets the context
+      const ctx = canvas.getContext('2d');
+        switch (this.extension) {
+          case "txt":
+            
+            // Set the font properties
+            ctx.font = "30px Arial";  // font size and family
+            ctx.fillStyle = "blue";   // font color
 
-        // gets the context
-        const ctx = canvas.getContext('2d');
+            // Add text to the canvas
+            ctx.fillText(this.content, 50, 50);  // (text, x, y)
 
-        // Set the font properties
-        ctx.font = "30px Arial";  // font size and family
-        ctx.fillStyle = "blue";   // font color
+            // Add more text with different styling
+            ctx.font = "20px Verdana";
+            ctx.fillStyle = "green";
+            break;
+          case "md":
 
-        // Add text to the canvas
-        ctx.fillText(this.content, 50, 50);  // (text, x, y)
+            // Set the font properties
+            ctx.font = "30px Arial";  // font size and family
+            ctx.fillStyle = "blue";   // font color
 
-        // Add more text with different styling
-        ctx.font = "20px Verdana";
-        ctx.fillStyle = "green";
+            // Add text to the canvas
+            ctx.fillText(this.content, 50, 50);  // (text, x, y)
+
+            // Add more text with different styling
+            ctx.font = "20px Verdana";
+            ctx.fillStyle = "green";
+            break;
+          default:
+            alert(this.extension + " extension is not handled");
+            break;
+        }
+        
 
     } catch (error) {
       alert("Error: " + error.message);

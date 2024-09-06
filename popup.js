@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
     
     try {
       let fileManager = new fileRetriever(currentUrl);
-      fileManager.fetchFileContent().then((content) => {
+      fileManager.fetchFileContent().then(() => {
         // Get the canvas element
         const canvas = document.getElementById('myCanvas');
 
@@ -34,6 +34,7 @@ class fileRetriever {
     console.log("the url before digesting is ", rawURL);
     // alert(rawURL);
     // Check if the URL is a valid GitHub file URL
+  // NOTE: We can continue this if else to allow more urls for display
   if (rawURL.includes('https://github.com/') && rawURL.includes('/blob/')) {
 
       // Replace the base URL and the 'blob' part with the corresponding raw content URL
@@ -54,13 +55,16 @@ class fileRetriever {
   // Method to fetch file content from the digested URL
   async fetchFileContent() {
       try {
-          const response = await fetch(this.digestedURL);
-          if (!response.ok) {
-              throw new Error(`Failed to fetch file content: ${response.statusText}`);
+        // NOTE: This is where we can check what site we are using and add new ones
+        if (this.type == 'github') {
+            const response = await fetch(this.digestedURL);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch file content: ${response.statusText}`);
+            }
+            // saves the file content
+            this.content = await response.text();
+            return this.content;
           }
-          // saves the file content
-          this.content = await response.text();
-          return this.content;
       } catch (error) {
           throw new Error(`Error fetching file content: ${error.message}`);
       }
@@ -71,6 +75,7 @@ class fileRetriever {
     try {
       // gets the context
       const ctx = canvas.getContext('2d');
+        // NOTE: we can continue this switch case to allow more extensions
         switch (this.extension) {
           case "txt":
             

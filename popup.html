@@ -2,12 +2,34 @@
 <html>
 <head>
   <title>GitHub File Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      width: 400px;
+      height: 600px;
+    }
+    
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ddd;
+      overflow-x: auto;
+      height: 150px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 300px;
+      border: 1px solid #000;
+      background-color: #000;
+    }
+  </style>
 </head>
 <body>
-  <input type="text" id="fileUrl" placeholder="Enter GitHub File URL" />
-  <button id="fetchFile">Fetch File</button>
   <pre id="fileContent"></pre>
-
-  <!-- <script src="popup.js"></script> -->
+  <canvas id="myCanvas"></canvas>
+  <script src="popup.js"></script>
 </body>
 </html>

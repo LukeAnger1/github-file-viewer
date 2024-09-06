@@ -1,12 +1,24 @@
 window.addEventListener('load', () => {
-
-  // This code gets the current url
-  let currentUrl = window.location.href;
-
-  let test = new fileRetriever(currentUrl);
-  
-  alert(currentUrl);
+    // Get the currently active tab in the window
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    let currentUrl = tabs[0].url;  // Get the URL of the active tab
+    alert("URL of current tab: " + currentUrl);
+    
+    try {
+      let test = new fileRetriever(currentUrl);
+      test.fetchFileContent().then((content) => {
+        alert("File content fetched: " + content);
+      }).catch(error => {
+        console.error(error);
+        alert("Failed to fetch file content: " + error.message);
+      });
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  });
 })
+
+
 
 // This class will retreive files based off a given url
 class fileRetriever {
@@ -18,25 +30,41 @@ class fileRetriever {
 
   // This will take a rawURL and set the type of retrieval process that will be used while saving other useful information
   digest(rawURL) {
-
+    console.log("the url before digesting is ", rawURL);
+    // alert(rawURL);
     // Check if the URL is a valid GitHub file URL
-    if (rawURL.includes('https://github.com/') && rawURL.includes('/blob/')) {
+  if (rawURL.includes('https://github.com/') && rawURL.includes('/blob/')) {
 
       // Replace the base URL and the 'blob' part with the corresponding raw content URL
       this.digestedURL = rawURL
-        .replace('https://github.com/', 'https://raw.githubusercontent.com/')
-        .replace('/blob/', '/');
+        .replace('https://github.com/', 'https://raw.githubusercontent.com/').replace('/blob/', '/');
 
       // This is the type of url to know what needs to be used API wise
       this.type = "github";
-      
+      // alert("here101");
       return this.digestedURL;
     } else {
-      alert("throwing an error");
+      // alert("here102");
       throw new Error('Invalid GitHub file URL');
     }
   }
 
+  // Method to fetch file content from the digested URL
+  async fetchFileContent() {
+      try {
+          const response = await fetch(this.digestedURL);
+          // alert("response1");
+          if (!response.ok) {
+            // alert("response3");
+              throw new Error(`Failed to fetch file content: ${response.statusText}`);
+          }
+          // alert("response2");
+          return await response.text();
+      } catch (error) {
+        // alert("response4");
+          throw new Error(`Error fetching file content: ${error.message}`);
+      }
+  }
 }
 
 
@@ -46,35 +74,35 @@ class fileRetriever {
 
 
 
-/// Working on code belpow
 
-// async function getFileFromGitHub(repoUrl, filePath) {
-//   // Extract the user, repo, and branch name from the Git URL
-//   const match = repoUrl.match(/https:\/\/github\.com\/([^\/]+)\/([^\/]+)(\/tree\/([^\/]+))?/);
+// TODO: make a memory catch using the below
+
+// try {
+//   // Access the root directory of the Origin Private File System (OPFS)
+//   const opfsRoot = await navigator.storage.getDirectory();
+
+//   // Create or get a file in the OPFS
+//   const fileHandle = await opfsRoot.getFileHandle('myFile.txt', { create: true });
+
+//   // Create a writable stream to write data to the file
+//   const writable = await fileHandle.createWritable();
   
-//   if (!match) {
-//       throw new Error('Invalid GitHub URL');
-//   }
+//   // Write some text data to the file
+//   await writable.write('Hello from OPFS!');
 
-//   const user = match[1];
-//   const repo = match[2];
-//   const branch = match[4] || 'main';  // Default to 'main' if no branch is specified
+//   // Close the writable stream (this finalizes the write operation)
+//   await writable.close();
 
-//   // Construct the URL for the GitHub API
-//   const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/${filePath}?ref=${branch}`;
+//   console.log('File written to OPFS successfully!');
 
-//   // Fetch the file content from GitHub
-//   const response = await fetch(apiUrl);
-//   if (!response.ok) {
-//       throw new Error('File not found or failed to fetch');
-//   }
+//   // Step 2: Read the file content after writing
+//   const file = await fileHandle.getFile();
+//   const text = await file.text(); // Get the content of the file as text
 
-//   const fileData = await response.json();
+//   // Step 3: Print out the content of the file
+//   console.log('File content:', text);
 
-//   // Decode the content from base64
-//   const fileContent = atob(fileData.content);
-
-//   // Display the file content in the browser
-//   const fileViewer = document.getElementById('fileViewer');
-//   fileViewer.textContent = fileContent;
+  
+// } catch (err) {
+//   console.error('Error accessing OPFS:', err);
 // }

@@ -5,25 +5,13 @@ window.addEventListener('load', () => {
     // alert("URL of current tab: " + currentUrl);
     
     try {
-      let test = new fileRetriever(currentUrl);
-      test.fetchFileContent().then((content) => {
+      let fileManager = new fileRetriever(currentUrl);
+      fileManager.fetchFileContent().then((content) => {
         // Get the canvas element
         const canvas = document.getElementById('myCanvas');
-        const ctx = canvas.getContext('2d');
 
-        // Set the font properties
-        ctx.font = "30px Arial";  // font size and family
-        ctx.fillStyle = "blue";   // font color
-
-        // Add text to the canvas
-        ctx.fillText(content, 50, 50);  // (text, x, y)
-
-        // Add more text with different styling
-        ctx.font = "20px Verdana";
-        ctx.fillStyle = "green";
-      }).catch(error => {
-        console.error(error);
-        alert("Failed to fetch file content: " + error.message);
+        // display the canvas element
+        fileManager.display(canvas);
       });
     } catch (error) {
       alert("Error: " + error.message);
@@ -54,10 +42,11 @@ class fileRetriever {
 
       // This is the type of url to know what needs to be used API wise
       this.type = "github";
-      // alert("here101");
+      // alert(this.digestedURL);
+      this.extension = this.digestedURL.split('.').pop(); // This gets the extension to know what to use when opening the file
+      // alert(this.extension);
       return this.digestedURL;
     } else {
-      // alert("here102");
       throw new Error('Invalid GitHub file URL');
     }
   }
@@ -66,17 +55,38 @@ class fileRetriever {
   async fetchFileContent() {
       try {
           const response = await fetch(this.digestedURL);
-          // alert("response1");
           if (!response.ok) {
-            // alert("response3");
               throw new Error(`Failed to fetch file content: ${response.statusText}`);
           }
-          // alert("response2");
-          return await response.text();
+          // saves the file content
+          this.content = await response.text();
+          return this.content;
       } catch (error) {
-        // alert("response4");
           throw new Error(`Error fetching file content: ${error.message}`);
       }
+  }
+
+  // this is the function to display on the canvas
+  display(canvas) {
+    try {
+
+        // gets the context
+        const ctx = canvas.getContext('2d');
+
+        // Set the font properties
+        ctx.font = "30px Arial";  // font size and family
+        ctx.fillStyle = "blue";   // font color
+
+        // Add text to the canvas
+        ctx.fillText(this.content, 50, 50);  // (text, x, y)
+
+        // Add more text with different styling
+        ctx.font = "20px Verdana";
+        ctx.fillStyle = "green";
+
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
   }
 }
 

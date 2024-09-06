@@ -2,12 +2,25 @@ window.addEventListener('load', () => {
     // Get the currently active tab in the window
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     let currentUrl = tabs[0].url;  // Get the URL of the active tab
-    alert("URL of current tab: " + currentUrl);
+    // alert("URL of current tab: " + currentUrl);
     
     try {
       let test = new fileRetriever(currentUrl);
       test.fetchFileContent().then((content) => {
-        alert("File content fetched: " + content);
+        // Get the canvas element
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set the font properties
+        ctx.font = "30px Arial";  // font size and family
+        ctx.fillStyle = "blue";   // font color
+
+        // Add text to the canvas
+        ctx.fillText(content, 50, 50);  // (text, x, y)
+
+        // Add more text with different styling
+        ctx.font = "20px Verdana";
+        ctx.fillStyle = "green";
       }).catch(error => {
         console.error(error);
         alert("Failed to fetch file content: " + error.message);

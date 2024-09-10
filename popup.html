@@ -10,13 +10,13 @@
       height: 600px;
     }
     
-    pre {
+    /* pre {
       background-color: #f4f4f4;
       padding: 10px;
       border: 1px solid #ddd;
       overflow-x: auto;
       height: 150px;
-    }
+    } */
 
     canvas {
       display: block;
@@ -29,7 +29,9 @@
 </head>
 <body>
   <pre id="fileContent"></pre>
-  <canvas id="myCanvas"></canvas>
-  <script src="popup.js"></script>
+  <canvas id="myCanvas">
+    <script src="three.min.js"></script>
+    <script src="popup.js"></script>
+  </canvas>
 </body>
 </html>

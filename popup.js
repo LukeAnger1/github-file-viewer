@@ -1,64 +1,23 @@
 window.addEventListener('load', () => {
 
-  // Get the canvas element by ID
-const canvas = document.getElementById('myCanvas');
-
-// Setup scene, camera, and renderer
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas }); // Use the existing canvas
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-// Create a cube geometry
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-// Position the camera
-camera.position.z = 5;
-
-// Create an animation loop
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Rotate the cube for animation
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-
-    renderer.render(scene, camera);
-}
-
-// Call the animation loop
-animate();
-
-// Handle window resize
-window.addEventListener('resize', () => {
-    // Update canvas size and aspect ratio
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    camera.updateProjectionMatrix();
-});
-
-
-  //   // Get the currently active tab in the window
-  //   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  //   let currentUrl = tabs[0].url;  // Get the URL of the active tab
-  //   // alert("URL of current tab: " + currentUrl);
+    // Get the currently active tab in the window
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    let currentUrl = tabs[0].url;  // Get the URL of the active tab
+    // alert("URL of current tab: " + currentUrl);
     
-  //   try {
-  //     let fileManager = new fileRetriever(currentUrl);
-  //     fileManager.fetchFileContent().then(() => {
-  //       // Get the canvas element
-  //       const canvas = document.getElementById('myCanvas');
+    try {
+      let fileManager = new fileRetriever(currentUrl);
+      fileManager.fetchFileContent().then(() => {
+        // Get the canvas element
+        const canvas = document.getElementById('myCanvas');
 
-  //       // display the canvas element
-  //       fileManager.display(canvas);
-  //     });
-  //   } catch (error) {
-  //     alert("Error: " + error.message);
-  //   }
-  // });
+        // display the canvas element
+        fileManager.display(canvas);
+      });
+    } catch (error) {
+      alert("Error0000: " + error.message);
+    }
+  });
 })
 
 
@@ -145,6 +104,51 @@ class fileRetriever {
             ctx.font = "20px Verdana";
             ctx.fillStyle = "green";
             break;
+          case "stl":
+            alert("in the case");
+
+            // Setup scene, camera, and renderer
+            const scene = new THREE.Scene();
+            alert("here4");
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            alert("here5");
+            // IMPORTANT TODO: The line below is throwing an error
+            const renderer = new THREE.WebGLRenderer({ canvas }); // Use the existing canvas
+            alert("here6");
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            alert("here1");
+            // Create a cube geometry
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            alert("here2");
+            // Position the camera
+            camera.position.z = 5;
+
+            // Create an animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Rotate the cube for animation
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                renderer.render(scene, camera);
+            }
+            alert("here3");
+            // Call the animation loop
+            animate();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                // Update canvas size and aspect ratio
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+            });
+
+            break;
           default:
             alert(this.extension + " extension is not handled");
             break;
@@ -152,7 +156,8 @@ class fileRetriever {
         
 
     } catch (error) {
-      alert("Error: " + error.message);
+      console.log("Error0001: with message " + error.message + " with error stack " + error.stack + " and with error details " + error.details);
+      alert("Error0001: with message " + error.message + " with error stack " + error.stack + " and with error details " + error.details);
     }
   }
 }
